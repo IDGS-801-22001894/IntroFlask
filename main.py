@@ -4,7 +4,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    titulo="IDGS801"
+    lista=["pedro","juan","luis"]
+    return render_template("index.html",titulo=titulo,lista=lista)
 
 @app.route("/hola")
 def hola():
@@ -30,6 +32,14 @@ def suma(n1, n2):
 @app.route("/default/<string:param>")
 def func(param="juan"):
     return f"<h1>Hola, {param}</h1>"
+
+@app.route("/ejemplo1")
+def ejemplo1():
+    return render_template("ejemplo1.html")
+
+@app.route("/ejemplo2")
+def ejemplo2():
+    return render_template("ejemplo2.html")
 
 @app.route("/aperas")
 def aperas():
