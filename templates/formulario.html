@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Datos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="formulario">
+            <h2>Datos Personales</h2>
+            <form method="POST">
+                <label>Nombre: <input type="text" id="nombre" name="nombre" required></label>
+                <label>Apellido Paterno: <input type="text" id="apaterno" name="apaterno" required></label>
+                <label>Apellido Materno: <input type="text" id="amaterno" name="amaterno" required></label>
+                <div class="fecha">
+                    <h3>Fecha de nacimiento</h3>
+                    <div class="fecha-container">
+                        <label>Día:<input type="text" id="dia" name="dia" required></label>
+                        <label>Mes:<input type="text" id="mes" name="mes" required></label>
+                        <label>Año:<input type="text" id="año" name="año" required></label>
+                    </div>
+                </div>
+                <div class="sexo">
+                    <h3>Sexo</h3>
+                    <label><input type="radio" name="sexo" value="Masculino" required> Masculino</label>
+                    <label><input type="radio" name="sexo" value="Femenino"> Femenino</label>
+                </div>
+                <div class="boton">
+                    <button type="submit">IMPRIMIR</button>
+                </div>
+            </form>
+        </div>
+        <div class="resultado">
+            {% if resultado %}
+                <h1 style="font-weight: normal;">Hola <span class="negrita">{{ resultado.nombre }} {{ resultado.apaterno }} {{ resultado.amaterno }}</span></h1>
+                <p>Tienes <span class="negrita">{{ resultado.edad }}</span> años</p>
+                <p>Tu signo zodiacal chino es {{ resultado.signo_chino }}</p>
+                {% if resultado.imagen_signo %}
+                    <div class="imagen-signo">
+                        <img src="{{ url_for('static', filename=resultado.imagen_signo) }}" alt="{{ resultado.signo_chino }}">
+                    </div>
+                {% endif %}
+            {% elif resultado and resultado.error %}
+                <p style="color: red;">{{ resultado.error }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
