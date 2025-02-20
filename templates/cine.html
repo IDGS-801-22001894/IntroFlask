@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinépolis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cinepolis.css') }}">
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Cinépolis</h1>
+        <h2>Entradas</h2>
+        <form method="POST" action="/cine">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="compradores">Cantidad Compradores:</label>
+            <input type="number" id="compradores" name="personas" required>
+
+            <label>Tarjeta Cineco:</label>
+            <div class="radio-group">
+                <input type="radio" id="si" name="metodo_pago" value="tarjeta" required>
+                <label for="si">Sí</label>
+                <input type="radio" id="no" name="metodo_pago" value="efectivo" required>
+                <label for="no">No</label>
+            </div>
+
+            <label for="boletos">Cantidad de Boletos:</label>
+            <input type="number" id="boletos" name="boletos" required>
+
+            <div class="acciones">
+                <button type="submit">Procesar</button>
+                <button type="button" onclick="window.location.href = '/goodbye';">Salir</button>
+            </div>
+        </form>
+
+        <div class="resultado">
+            <h3>Valor a Pagar:</h3>
+            <p>{{ resultado if resultado else "0" }}</p>
+        </div>
+    </div>
+</body>
+</html>

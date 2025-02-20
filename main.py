@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import forms
 from datetime import datetime
 
 app = Flask(__name__)
@@ -79,7 +80,23 @@ def operas():
 
     return render_template("OperasBas.html", resultado=resultado)
 
-@app.route("/cinepolis", methods=["GET", "POST"])
+@app.route("/Alumnos",methods=["GET", "POST"])
+def alumnos():
+    mat=''
+    nom=''
+    ape=''
+    email=''
+    alumno_clas=forms.UserForm(request.form)
+    if request.method == 'POST':
+        mat = alumno_clas.matricula.data
+        nom = alumno_clas.nombre.data
+        ape = alumno_clas.apellido.data
+        email = alumno_clas.correo.data
+
+    return render_template("Alumnos.html", form=alumno_clas,mat=mat,nom=nom,ape=ape,email=email)
+
+
+@app.route("/cine", methods=["GET", "POST"])
 def cinepolis():
     resultado = None
 
@@ -101,7 +118,7 @@ def cinepolis():
         else:
             resultado = "Cantidad de boletos no válida (máximo 7 por persona)."
 
-    return render_template("cinepolis.html", resultado=resultado)
+    return render_template("cine.html", resultado=resultado)
 
 @app.route("/goodbye")
 def goodbye():
