@@ -1,8 +1,16 @@
 from flask import Flask, render_template, request
+from io import open
+from datetime import datetime
 import forms
+from flask_wtf.csrf import CSRFProtect
+from flask import flash
+from flask import g
+
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key="esta es una clave secreta"
+csrf=CSRFProtect()
 signos_zodiaco = {
     "Mono": "img/mono.png",
     "Gallo": "img/gallo.png",
@@ -18,11 +26,28 @@ signos_zodiaco = {
     "Cabra": "img/cabra.png"
 }
 
+@app.errorhandler(404)
+def page_notfound(e):
+    return render_template('404.html'), 404
+
+@app.before_request
+def before_requestr():
+    g.user = "Mario"
+    print("beforer1")
+
+@app.after_request
+def after_request(response):
+    print("after1")
+    return response
+
 @app.route("/")
 def index():
+    nom='None'
     titulo = "IDGS801"
     lista = ["Pedro", "Juan", "Luis"]
-    return render_template("index.html", titulo=titulo, lista=lista)
+    nom=g.user
+    print("Index 2{}".format(g.user))
+    return render_template("index.html", titulo=titulo,nom=nom,lista=lista)
 
 @app.route("/ejemplo1")
 def ejemplo1():
@@ -80,21 +105,23 @@ def operas():
 
     return render_template("OperasBas.html", resultado=resultado)
 
-@app.route("/Alumnos",methods=["GET", "POST"])
+@app.route("/Alumnos",methods=["GET","POST"])
 def alumnos():
-    mat=''
+    mat=0
     nom=''
     ape=''
     email=''
-    alumno_clas=forms.UserForm(request.form)
-    if request.method == 'POST':
-        mat = alumno_clas.matricula.data
-        nom = alumno_clas.nombre.data
-        ape = alumno_clas.apellido.data
-        email = alumno_clas.correo.data
-
-    return render_template("Alumnos.html", form=alumno_clas,mat=mat,nom=nom,ape=ape,email=email)
-
+    alumno_class=forms.UserForm(request.form)
+    if request.method == 'POST' and alumno_class.validate():
+        mat = alumno_class.matricula.data
+        nom = alumno_class.nombre.data
+        ape = alumno_class.apellido.data
+        email = alumno_class.correo.data
+ 
+        mensaje = 'Bienvenido {}'.format(nom)
+        flash(mensaje)
+ 
+    return render_template("Alumnos.html",form=alumno_class,mat=mat,nom=nom,ape=ape,email=email)
 
 @app.route("/cine", methods=["GET", "POST"])
 def cinepolis():
@@ -166,4 +193,5 @@ def formulario():
     return render_template("formulario.html", resultado=resultado)
 
 if __name__ == "__main__":
+    csrf.init_app(app)
     app.run(debug=True, port=300)
