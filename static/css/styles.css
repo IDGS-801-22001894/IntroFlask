@@ -1,0 +1,56 @@
+/* Estilos para el formulario */
+.form-container {
+    display: flex;
+}
+
+.form-column {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: inline-block;
+    width: 150px;
+}
+
+.date-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.date-inputs input {
+    width: 50px; /* Ancho para día y mes */
+}
+
+.date-inputs input[type="number"][name="año"] {
+    width: 70px; /* Ancho para año */
+}
+
+/* Estilos para la respuesta */
+.response-container {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.response-container h2 {
+    color: #333;
+}
+
+.response-container p {
+    font-size: 18px;
+    color: #555;
+}
+
+.response-container img {
+    width: 100px;
+    height: auto;
+    margin-top: 10px;
+}

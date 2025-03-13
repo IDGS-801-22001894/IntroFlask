@@ -5,6 +5,8 @@ import forms
 from flask_wtf.csrf import CSRFProtect
 from flask import flash
 from flask import g
+from forms import ZodiacoForm
+from datetime import datetime 
 
 from datetime import datetime
 
@@ -122,6 +124,53 @@ def alumnos():
         flash(mensaje)
  
     return render_template("Alumnos.html",form=alumno_class,mat=mat,nom=nom,ape=ape,email=email)
+
+
+
+@app.route("/Zodiaco", methods=["GET", "POST"])
+def zodiaco():
+    zodiaco_class = forms.ZodiacoForm(request.form)
+    resultado = None
+    imagen_signo = None
+
+    if request.method == "POST" and zodiaco_class.validate():
+        
+        nombreZ = zodiaco_class.nombreZ.data
+        apellidoMaterno = zodiaco_class.apellidoMaterno.data
+        apellidoPaterno = zodiaco_class.apellidoPaterno.data
+        dia = zodiaco_class.dia.data
+        mes = zodiaco_class.mes.data
+        año = zodiaco_class.año.data
+        sexo = zodiaco_class.sexo.data
+
+        try:
+            fecha_nacimiento = datetime(year=año, month=mes, day=dia)
+            hoy = datetime.today()
+            edad = hoy.year - fecha_nacimiento.year - ((hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
+
+            signos = ["Mono", "Gallo", "Perro", "Cerdo", "Rata", "Buey", "Tigre", "Conejo", "Dragón", "Serpiente", "Caballo", "Cabra"]
+            signo_chino = signos[fecha_nacimiento.year % 12]
+
+            imagen_signo = signos_zodiaco.get(signo_chino, "img/default.png")
+
+            resultado = {
+                "nombre": nombreZ,
+                "apaterno": apellidoPaterno,
+                "amaterno": apellidoMaterno,
+                "edad": edad,
+                "signo_chino": signo_chino,
+                "imagen_signo": imagen_signo
+            }
+
+           
+            mensaje = f'Bienvenido {nombreZ} {apellidoPaterno}, tienes {edad} años y tu signo chino es {signo_chino}.'
+            flash(mensaje)
+
+        except Exception as e:
+            resultado = {"error": f"Error al procesar la fecha de nacimiento: {str(e)}"}
+
+    return render_template("Zodiaco.html", form=zodiaco_class, resultado=resultado)
+
 
 @app.route("/cine", methods=["GET", "POST"])
 def cinepolis():

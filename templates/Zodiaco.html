@@ -1,0 +1,56 @@
+{% extends "layaout2.html" %}
+
+{% block content %}
+    {% import "_macros.html" as macro %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <h1>Datos Generales</h1>
+    <div class="form-container">
+        <div class="form-column">
+            <form action="" method="post" novalidate>
+                {{ form.csrf_token }}
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                
+                <div class="form-field">
+                    {{ macro.camposNuevos(form.nombreZ) }}
+                </div>
+                <div class="form-field">
+                    {{ macro.camposNuevos(form.apellidoMaterno) }}
+                </div>
+                <div class="form-field">
+                    {{ macro.camposNuevos(form.apellidoPaterno) }}
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Fecha de Nacimiento</label>
+                    <div class="date-inputs">
+                        {{ form.dia(class="small-input", placeholder="Día") }}
+                        {{ form.mes(class="small-input", placeholder="Mes") }}
+                        {{ form.año(class="small-input", placeholder="Año") }}
+                    </div>
+                    {% if form.dia.errors or form.mes.errors or form.año.errors %}
+                        <ul>
+                            {% for error in form.dia.errors %}
+                                <li style="color:red;">{{ error }}</li>
+                            {% endfor %}
+                          
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="form-field">
+                    {{ macro.camposNuevos(form.sexo) }}
+                </div>
+            
+                <input type="submit" name="btn1" value="Guardar" class="btn btn-primary" />
+            </form>
+        </div>
+
+        {% if resultado %}
+            <div class="response-container">
+                <h2>Hola {{ resultado.nombre }} {{ resultado.apaterno }} {{ resultado.amaterno }}</h2>
+                <p>Tienes {{ resultado.edad }} años</p>
+                <p>Tu signo zodiacal es <strong>{{ resultado.signo_chino }}</strong></p>
+                <img src="{{ url_for('static', filename=resultado.imagen_signo) }}" alt="{{ resultado.signo_chino }}">
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

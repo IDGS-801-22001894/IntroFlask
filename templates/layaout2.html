@@ -4,69 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
     <style>
-        body{
-            padding-top: 60px;}
- 
-            .tr-head{background: #dff0d8;}  
+        body {
+            padding-top: 60px;
+        }
+        .tr-head {
+            background: #dff0d8;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        .alert-error {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
     </style>
-    <link href="../static/css/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet"/>
 </head>
 <body>
     <div class="navbar navbar navbar-inverse navbar-fixed-top">
-       
         <div class="navbar-inner">
             <div class="container">
-                <a class="brand" href="">
-                    IDGS-801
-                </a>
-           
-            <ul class="nav">
-                <li class="active">
-                    <a href="">
-                        <i class="icon-home icon-white"></i>
-                        Inicio
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <i class="icon-user icon-white"></i>
-                        Usuarios
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <i class="icon-user icon-white"></i>
-                        Alumnos
-                    </a>
-                </li>
-            </ul>
+                <a class="brand" href="">IDGS-801</a>
+                <ul class="nav">
+                    <li class="active"><a href=""><i class="icon-home icon-white"></i>Inicio</a></li>
+                    <li><a href=""><i class="icon-user icon-white"></i>Usuarios</a></li>
+                    <li><a href=""><i class="icon-user icon-white"></i>Alumnos</a></li>
+                </ul>
+            </div>
         </div>
-       </div>
     </div>
-    
-    
 
     <div class="container">
-       
-                {%with messages=get_flashed_messages()%}     
-                {%if messages%}
-                    {%for message in messages%}
-                    <div class="alert alert-succes">
-                        	{{message}}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-                    </div>
-                    {%endfor%}
-                {%endif%}
-                {%endwith%}
- 
-                {% block content%}
-           
-                {% endblock %}
-           
-     
- 
-</div>
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>
